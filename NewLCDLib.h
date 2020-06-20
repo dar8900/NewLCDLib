@@ -26,7 +26,7 @@
 #error DEFINE LCD TYPE -> LCDLib.h ( LCD_16_2 or LCD_20_4 )
 
 #endif
- 
+
 
 #define CENTER_ALIGN              25
 #define RIGHT_ALIGN     LCD_DFLT_COL
@@ -39,12 +39,12 @@ typedef enum
 	TWO,
 	THREE,
 	FOUR
-} LCD_ROWS;	
+} LCD_ROWS;
 
 typedef enum
 {
 	TO_LEFT = 0,
-	TO_RIGHT	
+	TO_RIGHT
 }SCROLL_MOVEMENT;
 
 
@@ -64,6 +64,7 @@ class NewLCDLib
 		void clearCol(uint8_t col);
 		void toggleBackLight();
 		void toggleBlinkCursor();
+		void setBackLight(bool status);
 		void createIcon(uint8_t *Icon, uint8_t IconNum);
 		void showIcon(uint8_t IconNum, uint8_t row, uint8_t col);
 		void printMessage(const char *Msg, uint8_t Row);
@@ -71,7 +72,7 @@ class NewLCDLib
 		void scrollText(char * Text, uint8_t Where, uint8_t DelayMs, uint8_t ScreenPos);
 	private:
 		uint8_t displayCol = LCD_DFLT_COL - 1;
-		uint8_t displayRow = LCD_DFLT_ROW - 1;
+		uint8_t displayRow = LCD_DFLT_ROW;
 		bool backLightOn, cursorBlinking;
 
 };

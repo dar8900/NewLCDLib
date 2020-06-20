@@ -11,7 +11,7 @@ void NewLCDLib::begin()
     backLightOn = true;
     lcd_main.backlight();
     cursorBlinking = false;
-    lcd_main.noBlink();   
+    lcd_main.noBlink();
 }
 
 void NewLCDLib::clearScreen()
@@ -36,6 +36,20 @@ void NewLCDLib::toggleBackLight()
     {
         lcd_main.noBacklight();
         backLightOn = false;
+    }
+}
+
+void NewLCDLib::setBackLight(bool status)
+{
+    if(status)
+    {
+        backLightOn = true;
+        lcd_main.backlight();
+    }
+    else
+    {
+        lcd_main.noBacklight();
+        backLightOn = false;        
     }
 }
 
@@ -86,7 +100,7 @@ void NewLCDLib::printString(uint8_t row, uint8_t col, const char * string)
             col = CENTER_ALIGN;
             row = TWO;
             string = "OVER DIMENSION";
-            Len = strlen(string);   
+            Len = strlen(string);
         }
     }
     switch(col)
@@ -103,7 +117,7 @@ void NewLCDLib::printString(uint8_t row, uint8_t col, const char * string)
         default:
             break;
     }
-    moveCursor(col, row);
+    moveCursor(row, col);
     lcd_main.print(string);
 }
 
@@ -138,7 +152,7 @@ void NewLCDLib::printValueFl(uint8_t row, uint8_t col, float value)
         lcd_main.home();
             break;
     }
-    moveCursor(col, row);
+    moveCursor(row, col);
     lcd_main.print(ValStr);
 }
 
@@ -173,7 +187,7 @@ void NewLCDLib::printValueInt(uint8_t row, uint8_t col, uint32_t value)
         lcd_main.home();
             break;
     }
-    moveCursor(col, row);
+    moveCursor(row, col);
     lcd_main.print(ValStr);
 }
 
@@ -280,5 +294,5 @@ void NewLCDLib::scrollText(char * Text, uint8_t Where, uint8_t DelayMs, uint8_t 
         else
             lcd_main.scrollDisplayRight();
         delay(DelayMs);
-    }   
+    }
 }
