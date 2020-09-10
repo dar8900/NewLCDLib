@@ -2,39 +2,61 @@
 
 
 
-LiquidCrystal_I2C lcd_main(LCD_DFLT_ADDR, LCD_DFLT_COL, LCD_DFLT_ROW);
-
+// LiquidCrystal_I2C lcd_main(LCD_DFLT_ADDR, LCD_DFLT_COL, LCD_DFLT_ROW);
+NewLCDLib::NewLCDLib(uint8_t LcdAddress, uint8_t LcdType)
+{
+    uint8_t Cols = 0, Rows = 0;
+    if(LcdType == LCD_16_2)
+    {
+        Cols = 16;
+        Rows = 2;
+    }
+    else if(LcdType == LCD_20_4)
+    {
+        Cols = 20;
+        Rows = 4;
+    }
+    else
+    {
+        Cols = 16;
+        Rows = 2;
+    }
+    displayCol = Cols - 1;
+    displayRow = Rows; 
+    lcd_main = new LiquidCrystal_I2C(LcdAddress, Cols, Rows);
+}
 
 void NewLCDLib::begin()
 {
-    lcd_main.begin();
+    
+    lcd_main->begin();
     backLightOn = true;
-    lcd_main.backlight();
+    lcd_main->backlight();
     cursorBlinking = false;
-    lcd_main.noBlink();
+    lcd_main->noBlink();
 }
 
 void NewLCDLib::clearScreen()
 {
-    lcd_main.clear();
+    lcd_main->clear();
 }
 
 void NewLCDLib::moveCursor(uint8_t row, uint8_t col)
 {
     if(row <= displayRow && col <= displayCol)
-        lcd_main.setCursor(col, row);
+        lcd_main->setCursor(col, row);
 }
 
 void NewLCDLib::toggleBackLight()
 {
     if(!backLightOn)
     {
-        lcd_main.backlight();
+        lcd_main->backlight();
         backLightOn = true;
     }
     else
     {
-        lcd_main.noBacklight();
+        lcd_main->noBacklight();
         backLightOn = false;
     }
 }
@@ -44,11 +66,11 @@ void NewLCDLib::setBackLight(bool status)
     if(status)
     {
         backLightOn = true;
-        lcd_main.backlight();
+        lcd_main->backlight();
     }
     else
     {
-        lcd_main.noBacklight();
+        lcd_main->noBacklight();
         backLightOn = false;        
     }
 }
@@ -57,12 +79,12 @@ void NewLCDLib::toggleBlinkCursor()
 {
     if(!cursorBlinking)
     {
-        lcd_main.blink();
+        lcd_main->blink();
         cursorBlinking = true;
     }
     else
     {
-        lcd_main.noBlink();
+        lcd_main->noBlink();
         cursorBlinking = false;
     }
 }
@@ -118,7 +140,7 @@ void NewLCDLib::printString(uint8_t row, uint8_t col, const char * string)
             break;
     }
     moveCursor(row, col);
-    lcd_main.print(string);
+    lcd_main->print(string);
 }
 
 
@@ -149,11 +171,11 @@ void NewLCDLib::printValueFl(uint8_t row, uint8_t col, float value)
             col = 0;
             break;
         default:
-        lcd_main.home();
+        lcd_main->home();
             break;
     }
     moveCursor(row, col);
-    lcd_main.print(ValStr);
+    lcd_main->print(ValStr);
 }
 
 
@@ -184,25 +206,25 @@ void NewLCDLib::printValueInt(uint8_t row, uint8_t col, uint32_t value)
             col = 0;
             break;
         default:
-        lcd_main.home();
+        lcd_main->home();
             break;
     }
     moveCursor(row, col);
-    lcd_main.print(ValStr);
+    lcd_main->print(ValStr);
 }
 
 
 void NewLCDLib::printChar(uint8_t row, uint8_t col, char Char)
 {
     moveCursor(row, col);
-    lcd_main.print(Char);
+    lcd_main->print(Char);
 }
 
 
 void NewLCDLib::clearChar(uint8_t row, uint8_t col)
 {
     moveCursor(row, col);
-    lcd_main.print(" ");
+    lcd_main->print(" ");
 }
 
 
@@ -211,7 +233,7 @@ void NewLCDLib::clearLine(uint8_t row)
     for(int i = 0; i < displayCol; i++)
     {
         moveCursor(row, i);
-        lcd_main.print(" ");
+        lcd_main->print(" ");
     }
 }
 
@@ -227,14 +249,14 @@ void NewLCDLib::createIcon(uint8_t *Icon, uint8_t IconNum)
 {
     if(IconNum < 7)
     {
-        lcd_main.createChar(IconNum, Icon);
+        lcd_main->createChar(IconNum, Icon);
     }
 }
 
 void NewLCDLib::showIcon(uint8_t IconNum, uint8_t row, uint8_t col)
 {
-    lcd_main.setCursor(col, row);
-    lcd_main.write(IconNum);
+    lcd_main->setCursor(col, row);
+    lcd_main->write(IconNum);
 }
 
 
@@ -290,9 +312,9 @@ void NewLCDLib::scrollText(char * Text, uint8_t Where, uint8_t DelayMs, uint8_t 
     for(uint8_t i = 0; i < ScrollLen; i++)
     {
         if(Where == TO_LEFT)
-            lcd_main.scrollDisplayLeft();
+            lcd_main->scrollDisplayLeft();
         else
-            lcd_main.scrollDisplayRight();
+            lcd_main->scrollDisplayRight();
         delay(DelayMs);
     }
 }

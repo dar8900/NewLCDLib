@@ -6,51 +6,65 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h> // Libreria LCD I2C
 
-#undef LCD_16_2
-#define LCD_20_4
+// #undef LCD_16_2
+// #define LCD_20_4
 
-#define LCD_DFLT_ADDR           0x27
+// #define LCD_DFLT_ADDR           0x27
 
-#if defined(LCD_16_2)
+// #if defined(LCD_16_2)
 
-#define LCD_DFLT_COL 	          16
-#define LCD_DFLT_ROW               2
+// #define LCD_DFLT_COL 	          16
+// #define LCD_DFLT_ROW               2
 
-#elif defined(LCD_20_4)
+// #elif defined(LCD_20_4)
 
-#define LCD_DFLT_COL 	          20
-#define LCD_DFLT_ROW               4
+// #define LCD_DFLT_COL 	          20
+// #define LCD_DFLT_ROW               4
 
-#else
+// #else
 
-#error DEFINE LCD TYPE -> LCDLib.h ( LCD_16_2 or LCD_20_4 )
+// #error DEFINE LCD TYPE -> LCDLib.h ( LCD_16_2 or LCD_20_4 )
 
-#endif
+// #endif
 
 
-#define CENTER_ALIGN              25
-#define RIGHT_ALIGN     LCD_DFLT_COL
-#define LEFT_ALIGN                 0
-#define AFTER_ARROW_POS			   1
+// #define CENTER_ALIGN              25
+// #define RIGHT_ALIGN     LCD_DFLT_COL
+// #define LEFT_ALIGN                 0
+// #define AFTER_ARROW_POS			   1
 
-typedef enum
-{
-	ONE = 0,
-	TWO,
-	THREE,
-	FOUR
-} LCD_ROWS;
 
-typedef enum
-{
-	TO_LEFT = 0,
-	TO_RIGHT
-}SCROLL_MOVEMENT;
+
 
 
 class NewLCDLib
 {
 	public:
+		enum
+		{
+			LCD_16_2 = 0,
+			LCD_20_4
+		};
+		enum
+		{
+			LEFT_ALIGN = 0,
+			RIGHT_ALIGN,
+			CENTER_ALIGN,
+			AFTER_ARROW_POS
+		};
+		typedef enum
+		{
+			ONE = 0,
+			TWO,
+			THREE,
+			FOUR
+		} LCD_ROWS;
+		typedef enum
+		{
+			TO_LEFT = 0,
+			TO_RIGHT
+		}SCROLL_MOVEMENT;
+		NewLCDLib(uint8_t LcdAddress = 0x27, uint8_t LcdType = LCD_16_2);
 		void begin();
 		void clearScreen();
 		void moveCursor(uint8_t row, uint8_t col);
@@ -71,8 +85,9 @@ class NewLCDLib
 		void printText(const char *Text);
 		void scrollText(char * Text, uint8_t Where, uint8_t DelayMs, uint8_t ScreenPos);
 	private:
-		uint8_t displayCol = LCD_DFLT_COL - 1;
-		uint8_t displayRow = LCD_DFLT_ROW;
+		LiquidCrystal_I2C *lcd_main;
+		uint8_t displayCol;// = LCD_DFLT_COL - 1;
+		uint8_t displayRow;// = LCD_DFLT_ROW;
 		bool backLightOn, cursorBlinking;
 
 };
