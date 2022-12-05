@@ -65,7 +65,7 @@ class NewLCDLib
 			TO_RIGHT
 		}SCROLL_MOVEMENT;
 		NewLCDLib(uint8_t LcdAddress = 0x27, uint8_t LcdType = LCD_16_2);
-		void begin();
+		//void begin();
 		void clearScreen();
 		void moveCursor(uint8_t row, uint8_t col);
 		void blinkDisplay(uint8_t NumTimes = 1, uint16_t PulseDelay = 100);

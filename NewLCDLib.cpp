@@ -26,15 +26,17 @@ NewLCDLib::NewLCDLib(uint8_t LcdAddress, uint8_t LcdType)
     lcd_main = new LiquidCrystal_I2C(LcdAddress, Cols, Rows);
 }
 
+/*
 void NewLCDLib::begin()
 {
     
-    lcd_main->begin();
+    lcd_main->begin(displayCol, displayRow);
     backLightOn = true;
     lcd_main->backlight();
     cursorBlinking = false;
     lcd_main->noBlink();
 }
+*/
 
 void NewLCDLib::clearScreen()
 {
@@ -89,7 +91,7 @@ void NewLCDLib::toggleBlinkCursor()
     }
 }
 
-void NewLCDLib::blinkDisplay(uint8_t NumTimes = 1, uint16_t PulseDelay)
+void NewLCDLib::blinkDisplay(uint8_t NumTimes, uint16_t PulseDelay)
 {
     uint8_t num = 0;
     if(PulseDelay < 20)
