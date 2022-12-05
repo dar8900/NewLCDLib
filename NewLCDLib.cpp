@@ -26,17 +26,14 @@ NewLCDLib::NewLCDLib(uint8_t LcdAddress, uint8_t LcdType)
     lcd_main = new LiquidCrystal_I2C(LcdAddress, Cols, Rows);
 }
 
-/*
+
 void NewLCDLib::begin()
 {
-    
-    lcd_main->begin(displayCol, displayRow);
-    backLightOn = true;
-    lcd_main->backlight();
+    setBackLight(true);
     cursorBlinking = false;
     lcd_main->noBlink();
 }
-*/
+
 
 void NewLCDLib::clearScreen()
 {
@@ -45,67 +42,42 @@ void NewLCDLib::clearScreen()
 
 void NewLCDLib::moveCursor(uint8_t row, uint8_t col)
 {
-    if(row <= displayRow && col <= displayCol)
+    if(row <= displayRow && col <= displayCol){
         lcd_main->setCursor(col, row);
+    }
 }
 
 void NewLCDLib::toggleBackLight()
 {
-    if(!backLightOn)
-    {
-        lcd_main->backlight();
-        backLightOn = true;
-    }
-    else
-    {
-        lcd_main->noBacklight();
-        backLightOn = false;
-    }
+    backLightOn ? lcd_main->noBacklight() : lcd_main->backlight();
+    backLightOn = !backLightOn;
 }
 
 void NewLCDLib::setBackLight(bool status)
 {
-    if(status)
-    {
-        backLightOn = true;
-        lcd_main->backlight();
-    }
-    else
-    {
-        lcd_main->noBacklight();
-        backLightOn = false;        
-    }
+    status ? lcd_main->backlight() : lcd_main->noBacklight();
+    backLightOn = status;
 }
 
 void NewLCDLib::toggleBlinkCursor()
 {
-    if(!cursorBlinking)
-    {
-        lcd_main->blink();
-        cursorBlinking = true;
-    }
-    else
-    {
-        lcd_main->noBlink();
-        cursorBlinking = false;
-    }
+    cursorBlinking ? lcd_main->noBlink() : lcd_main->blink();
+    cursorBlinking = !cursorBlinking;
 }
 
 void NewLCDLib::blinkDisplay(uint8_t NumTimes, uint16_t PulseDelay)
 {
     uint8_t num = 0;
-    if(PulseDelay < 20)
+    if(PulseDelay < 20){
         PulseDelay = 20;
-    backLightOn = false;
-    for(num = 0; num < NumTimes; num++)
+    }
+    setBackLight(false);
+    for(num = 0; num < NumTimes * 2; num++)
     {
         toggleBackLight();
         delay(PulseDelay);
-        toggleBackLight();
-        delay(PulseDelay);
     }
-    backLightOn = false;
-    toggleBackLight();
+    setBackLight(true);
 }
 void NewLCDLib::printString(uint8_t row, uint8_t col, const char * string)
 {
